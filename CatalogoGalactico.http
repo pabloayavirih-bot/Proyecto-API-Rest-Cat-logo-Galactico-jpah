@@ -1,0 +1,94 @@
+@baseUrl = http://localhost:5187
+
+### 1) Listar personajes con paginación
+GET {{baseUrl}}/api/v1/personajes?page=1&pageSize=10
+Accept: application/json
+
+### 2) Filtros combinados pedidos por el proyecto
+GET {{baseUrl}}/api/v1/personajes?faccion=Imperio&fuerzaSensitivo=true&page=1&pageSize=10
+Accept: application/json
+
+### 3) Buscar personajes
+GET {{baseUrl}}/api/v1/personajes?search=luke&page=1&pageSize=10
+Accept: application/json
+
+### 4) Consultar un personaje
+GET {{baseUrl}}/api/v1/personajes/1
+Accept: application/json
+
+### 5) Ranking por poder
+GET {{baseUrl}}/api/v1/personajes/ranking?por=poder
+Accept: application/json
+
+### 6) Eventos de un personaje
+GET {{baseUrl}}/api/v1/personajes/1/eventos
+Accept: application/json
+
+### 7) Listar cartas
+GET {{baseUrl}}/api/v1/cartas?page=1&pageSize=10
+Accept: application/json
+
+### 8) MVP del evento 1
+GET {{baseUrl}}/api/v1/eventos/1/mvp
+Accept: application/json
+
+### 9) Simular batalla del evento 1
+POST {{baseUrl}}/api/v1/eventos/1/simular
+Accept: application/json
+
+### 10) Crear un personaje
+POST {{baseUrl}}/api/v1/personajes
+Content-Type: application/json
+
+{
+  "nombre": "Personaje de prueba",
+  "especie": "Humano",
+  "faccion": "Neutral",
+  "afiliacion": "Independiente",
+  "estado": "vivo",
+  "fuerzaSensitivo": false
+}
+
+### 11) Crear un evento que registra la muerte de Yoda en 4 ABY
+# Al registrarse correctamente, el estado del personaje 5 pasa automáticamente a "muerto".
+POST {{baseUrl}}/api/v1/eventos
+Content-Type: application/json
+
+{
+  "nombre": "Evento de prueba de muerte",
+  "fecha": 4,
+  "ubicacion": "Lugar de prueba",
+  "descripcion": "Sirve para demostrar la actualización automática del estado.",
+  "participantes": [1, 5],
+  "muertos": [5]
+}
+
+### 12) Verificar que Yoda quedó muerto
+GET {{baseUrl}}/api/v1/personajes/5
+Accept: application/json
+
+### 13) Intentar una participación posterior de Yoda: debe responder 400
+POST {{baseUrl}}/api/v1/eventos
+Content-Type: application/json
+
+{
+  "nombre": "Evento posterior inválido",
+  "fecha": 5,
+  "ubicacion": "Lugar de prueba",
+  "descripcion": "Debe fallar por la regla temporal de muerte.",
+  "participantes": [2, 5],
+  "muertos": []
+}
+
+### 14) Ejemplo BBY: -10 representa 10 BBY
+POST {{baseUrl}}/api/v1/eventos
+Content-Type: application/json
+
+{
+  "nombre": "Evento antiguo de prueba",
+  "fecha": -10,
+  "ubicacion": "Lugar antiguo",
+  "descripcion": "Ejemplo de la convención BBY/ABY almacenada como entero.",
+  "participantes": [4, 5],
+  "muertos": []
+}
