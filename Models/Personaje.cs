@@ -9,4 +9,5 @@ public class Personaje
     public string Afiliacion { get; set; } = string.Empty;
     public string Estado { get; set; } = "desconocido";
     public bool FuerzaSensitivo { get; set; }
+    public string Image { get; set; } = string.Empty;
 }
