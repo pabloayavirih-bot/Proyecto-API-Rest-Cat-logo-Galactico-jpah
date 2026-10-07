@@ -13,6 +13,8 @@ public class Evento
     public string Descripcion { get; set; } = string.Empty;
     public List<int> Participantes { get; set; } = new();
 
+    public IReadOnlyList<int> PersonajesParticipantesIds => Participantes;
+
     // Esta lista permite aplicar la regla de negocio de las muertes.
     public List<int> Muertos { get; set; } = new();
 

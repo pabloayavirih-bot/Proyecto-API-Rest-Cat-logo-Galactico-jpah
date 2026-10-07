@@ -14,18 +14,22 @@ public class CatalogoData
             Faccion = "Rebelde",
             Afiliacion = "Alianza Rebelde",
             Estado = "vivo",
-            FuerzaSensitivo = true
+            FuerzaSensitivo = true,
+            Image = "https://commons.wikimedia.org/wiki/Special:Redirect/file/SWCA_-_Luke_Skywalker_(16580421784).jpg?width=500"
         },
+
         new Personaje
         {
             Id = 2,
             Nombre = "Darth Vader",
             Especie = "Humano",
             Faccion = "Imperio",
-            Afiliacion = "Imperio Galáctico",
+            Afiliacion = "Imperio Galactico",
             Estado = "vivo",
-            FuerzaSensitivo = true
+            FuerzaSensitivo = true,
+            Image = "https://commons.wikimedia.org/wiki/Special:Redirect/file/Darth_Vader_at_Galaxy%E2%80%99s_Edge.jpg?width=500"
         },
+
         new Personaje
         {
             Id = 3,
@@ -34,8 +38,10 @@ public class CatalogoData
             Faccion = "Rebelde",
             Afiliacion = "Alianza Rebelde",
             Estado = "vivo",
-            FuerzaSensitivo = false
+            FuerzaSensitivo = false,
+            Image = "https://commons.wikimedia.org/wiki/Special:Redirect/file/Han_Solo_in_Carbonite_(31649435213).jpg?width=500"
         },
+
         new Personaje
         {
             Id = 4,
@@ -44,8 +50,10 @@ public class CatalogoData
             Faccion = "Rebelde",
             Afiliacion = "Alianza Rebelde",
             Estado = "vivo",
-            FuerzaSensitivo = false
+            FuerzaSensitivo = false,
+            Image = "https://commons.wikimedia.org/wiki/Special:Redirect/file/Chewbacca_(7865110592).jpg?width=500"
         },
+
         new Personaje
         {
             Id = 5,
@@ -54,7 +62,8 @@ public class CatalogoData
             Faccion = "Neutral",
             Afiliacion = "Orden Jedi",
             Estado = "vivo",
-            FuerzaSensitivo = true
+            FuerzaSensitivo = true,
+            Image = "https://commons.wikimedia.org/wiki/Special:Redirect/file/Yoda_I_know_you%27re_in_there%21.jpg?width=500"
         }
     };
 
@@ -76,7 +85,7 @@ public class CatalogoData
             Fecha = 0,
             Ubicacion = "Yavin",
             Descripcion = "Evento de referencia para la convención temporal del catálogo.",
-            Participantes = new List<int> { 1, 2, 3 },
+            Participantes = new List<int> { 1, 2, 5 },
             Muertos = new List<int>()
         },
         new Evento

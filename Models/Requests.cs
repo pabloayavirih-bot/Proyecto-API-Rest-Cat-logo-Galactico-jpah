@@ -6,7 +6,8 @@ public record PersonajeInput(
     string Faccion,
     string Afiliacion,
     string Estado,
-    bool FuerzaSensitivo
+    bool FuerzaSensitivo,
+    string? Image = null
 );
 
 public record CardPersonajeInput(

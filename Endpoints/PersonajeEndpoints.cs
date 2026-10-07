@@ -16,16 +16,25 @@ public static class PersonajeEndpoints
             string? estado = null,
             string? search = null,
             int page = 1,
-            int pageSize = 10) =>
+            int pageSize = 100) =>
         {
             var resultado = service.ListarPersonajes(
-                faccion, fuerzaSensitivo, estado, search, page, pageSize);
+                faccion,
+                fuerzaSensitivo,
+                estado,
+                search,
+                page,
+                pageSize
+            );
 
-            return ApiResults.Desde(resultado);
+            if (!resultado.Exitoso)
+                return ApiResults.Desde(resultado);
+
+            return Results.Ok(resultado.Datos!.Data);
         })
         .WithName("ListarPersonajes")
-        .WithSummary("Lista personajes con filtros combinables y paginación.")
-        .Produces<PagedResponse<Personaje>>(StatusCodes.Status200OK)
+        .WithSummary("Lista personajes con filtros.")
+        .Produces<IReadOnlyList<Personaje>>(StatusCodes.Status200OK)
         .Produces(StatusCodes.Status400BadRequest);
 
         group.MapGet("/ranking", (CatalogoService service, string por = "poder") =>
@@ -44,6 +53,15 @@ public static class PersonajeEndpoints
         .WithName("EventosDePersonaje")
         .WithSummary("Devuelve los eventos relacionados con un personaje.")
         .Produces<IReadOnlyList<Evento>>(StatusCodes.Status200OK)
+        .Produces(StatusCodes.Status404NotFound);
+
+        group.MapGet("/{id:int}/con-card", (int id, CatalogoService service) =>
+        {
+            return ApiResults.Desde(service.ObtenerPersonajeConCard(id));
+        })
+        .WithName("ObtenerPersonajeConCard")
+        .WithSummary("Obtiene un personaje junto con su carta de combate.")
+        .Produces<PersonajeConCardResponse>(StatusCodes.Status200OK)
         .Produces(StatusCodes.Status404NotFound);
 
         group.MapGet("/{id:int}", (int id, CatalogoService service) =>
