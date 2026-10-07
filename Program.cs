@@ -15,11 +15,27 @@ builder.Services.AddSwaggerGen(options =>
     });
 });
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("Frontend", policy =>
+    {
+        policy
+            .WithOrigins("http://localhost:5173")
+            .AllowAnyHeader()
+            .AllowAnyMethod();
+    });
+});
+
 // Almacenamiento y lógica de negocio viven fuera de los endpoints.
 builder.Services.AddSingleton<CatalogoData>();
 builder.Services.AddSingleton<CatalogoService>();
 
 var app = builder.Build();
+
+app.Urls.Clear();
+app.Urls.Add("http://localhost:5000");
+
+app.UseCors("Frontend");
 
 if (app.Environment.IsDevelopment())
 {
@@ -27,11 +43,13 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+
+
 app.MapGet("/", () => Results.Redirect("/swagger"))
     .ExcludeFromDescription();
 
 // Todas las rutas públicas de esta versión comienzan con /api/v1.
-var api = app.MapGroup("/api/v1");
+var api = app.MapGroup("");
 
 api.MapPersonajeEndpoints();
 api.MapCartaEndpoints();
