@@ -38,9 +38,29 @@ public record SimulacionResponse(
     int EventoId,
     string Evento,
     string Ganador,
+    int? GanadorId,
     string Resultado,
     string Criterio,
     IReadOnlyList<FuerzaBando> Totales
+);
+
+public record CardCombateResponse(
+    int Poder,
+    int Peligrosidad,
+    string HabilidadEspecial,
+    string Arma
+);
+
+public record PersonajeConCardResponse(
+    int Id,
+    string Nombre,
+    string Especie,
+    string Faccion,
+    string Afiliacion,
+    string Estado,
+    bool FuerzaSensitivo,
+    string Image,
+    CardCombateResponse? Card
 );
 
 public record ResultadoOperacion<T>(

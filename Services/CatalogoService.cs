@@ -72,6 +72,45 @@ public class CatalogoService
             : Ok(personaje);
     }
 
+    public ResultadoOperacion<PersonajeConCardResponse> ObtenerPersonajeConCard(int id)
+    {
+        var personaje = _data.Personajes.FirstOrDefault(p => p.Id == id);
+
+        if (personaje is null)
+            return Error<PersonajeConCardResponse>(
+                404,
+                $"No existe el personaje con id {id}."
+            );
+
+        var carta = _data.Cartas.FirstOrDefault(c => c.PersonajeId == id);
+
+        CardCombateResponse? card = null;
+
+        if (carta is not null)
+        {
+            card = new CardCombateResponse(
+                carta.Poder,
+                carta.NivelPeligrosidad,
+                carta.HabilidadEspecial,
+                carta.Arma
+            );
+        }
+
+        var respuesta = new PersonajeConCardResponse(
+            personaje.Id,
+            personaje.Nombre,
+            personaje.Especie,
+            personaje.Faccion,
+            personaje.Afiliacion,
+            personaje.Estado,
+            personaje.FuerzaSensitivo,
+            personaje.Image,
+            card
+        );
+
+        return Ok(respuesta);
+    }
+
     public ResultadoOperacion<Personaje> CrearPersonaje(PersonajeInput input)
     {
         var error = ValidarPersonaje(input, null);
@@ -86,7 +125,8 @@ public class CatalogoService
             Faccion = Normalizar(FaccionesValidas, input.Faccion)!,
             Afiliacion = input.Afiliacion.Trim(),
             Estado = Normalizar(EstadosValidos, input.Estado)!,
-            FuerzaSensitivo = input.FuerzaSensitivo
+            FuerzaSensitivo = input.FuerzaSensitivo,
+            Image = input.Image?.Trim() ?? string.Empty
         };
 
         _data.Personajes.Add(personaje);
@@ -117,6 +157,7 @@ public class CatalogoService
         personaje.Afiliacion = input.Afiliacion.Trim();
         personaje.Estado = nuevoEstado;
         personaje.FuerzaSensitivo = input.FuerzaSensitivo;
+        personaje.Image = input.Image?.Trim() ?? string.Empty;
 
         return Ok(personaje);
     }
@@ -443,6 +484,23 @@ public class CatalogoService
             ? "Empate"
             : ordenados[0].Faccion;
 
+        int? ganadorId = null;
+
+        if (ganador != "Empate")
+        {
+            var idsBandoGanador = participantes
+                .Where(p => p.Faccion.Equals(
+                    ganador,
+                    StringComparison.OrdinalIgnoreCase))
+                .Select(p => p.Id)
+                .ToHashSet();
+
+            ganadorId = cartas
+                .Where(c => idsBandoGanador.Contains(c.PersonajeId))
+                .OrderByDescending(c => c.Poder)
+                .Select(c => (int?)c.PersonajeId)
+                .FirstOrDefault();
+        }
         var resultado = ganador == "Empate"
             ? "La simulación terminó en empate."
             : $"La facción ganadora es {ganador}.";
@@ -458,6 +516,7 @@ public class CatalogoService
             evento.Id,
             evento.Nombre,
             ganador,
+            ganadorId,
             resultado,
             criterio,
             totales));
